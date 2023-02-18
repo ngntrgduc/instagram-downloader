@@ -15,7 +15,6 @@ def next_image():
         sleep(2 + random.random())
     except Exception as e:
         print(f'Exception: {e}')
-        pass
 
 def get_image_urls():
     return browser.execute_script("let urls = []; \
@@ -47,17 +46,15 @@ if not download_folder.exists():
     download_folder.mkdir()
 
 # Get post urls in urls.txt
-# try:
-#     with open('urls.txt', 'r') as f:
-#         post_urls = f.read().rstrip().split('\n')
-#     f.close()
-# except Exception as e:
-#     print(f'Exception: {e}')
+try:
+    with open('urls.txt', 'r') as f:
+        post_urls = f.read().rstrip().split('\n')
+    f.close()
+except Exception as e:
+    print(f'Exception: {e}')
 
 # Main program
 name = 1
-post_urls = ['https://www.instagram.com/p/CUnB8JbJVV3/']
-# post_urls = ['https://www.instagram.com/p/CjLGmelrdNh/']
 for url in post_urls:
     image_urls_in_post = set()
     browser.get(url)
@@ -92,7 +89,6 @@ for url in post_urls:
                 image_urls_in_post.update(get_image_urls())
             
             for url in image_urls_in_post:
-                print(f' - {url}')
                 download_image(url, f'{name}.jpg', download_folder)
                 name += 1
             
