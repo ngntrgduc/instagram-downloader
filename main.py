@@ -54,7 +54,7 @@ except Exception as e:
     print(f'Exception: {e}')
 
 # Main program
-name = 1
+name = len(list(Path('Downloaded').glob('*'))) + 1
 for url in post_urls:
     image_urls_in_post = set()
     browser.get(url)
