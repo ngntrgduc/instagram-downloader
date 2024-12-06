@@ -14,4 +14,5 @@ py main.py
 
 ### Todo
 - [ ] Fix: sometimes downloaded irrelevent images
-- [ ] Handle Video in post?
+- [ ] Handle video in post?
+- [ ] Refactor code or change the download approach
