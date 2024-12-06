@@ -1,6 +1,6 @@
 from selenium import webdriver
-from selenium.webdriver.edge.service import Service as EdgeService
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 from pathlib import Path
 from time import sleep, time
 from PIL import Image
@@ -36,26 +36,26 @@ def download_image(url, name, download_path):
 
 
 time_start = time()
-options = webdriver.EdgeOptions() 
+options = webdriver.ChromeOptions() 
 options.add_argument("--start-maximized")
-browser = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()), options=options)
+browser = webdriver.Chrome(
+    service=ChromeService(ChromeDriverManager().install()),
+    options=options
+)
 
 # Make folder 'Downloaded' if not exist
 download_folder = Path('Downloaded')
 if not download_folder.exists():
     download_folder.mkdir()
 
-# Get post urls in urls.txt
-try:
-    with open('urls.txt', 'r') as f:
-        post_urls = f.read().rstrip().split('\n')
-    f.close()
-except Exception as e:
-    print(f'Exception: {e}')
+with open('urls.txt', 'r') as f:
+    data = f.read()
+
+urls = [url for url in data.splitlines() if url]
 
 # Main program
 name = len(list(Path('Downloaded').glob('*'))) + 1
-for url in post_urls:
+for url in urls:
     image_urls_in_post = set()
     browser.get(url)
     sleep(random.random()*2 + 5)
