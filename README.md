@@ -12,7 +12,11 @@ Create new file named `urls.txt` and then paste Instagram post URLs to it, pleas
 py main.py
 ```
 
+If you deleted some images, then the auto naming image can overwriting other images. Run `bulk_rename.py` to rename all the images.
+
 ### Todo
-- [ ] Fix: sometimes downloaded irrelevent images
 - [ ] Handle video in post?
-- [ ] Refactor code or change the download approach
+- [ ] Change the download approach?
+- [ ] Speed up by using asyncio?
+- [x] Refactor code 
+- [x] Write script to bulk-rename all downloaded images -> prevent overwriting images when some images were deleted
