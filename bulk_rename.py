@@ -1,6 +1,7 @@
 from pathlib import Path
 
-def bulk_rename(folder_name: str):
+def bulk_rename(folder_name: str = 'Downloaded'):
+    """Renaming all downloaded images using increasing numerical order"""
     folder = Path(folder_name)
     if not folder.is_dir():
         raise ValueError(f'The folder {folder_name} does not exist or is not a directory.')
