@@ -9,6 +9,8 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
 
+from bulk_rename import bulk_rename
+
 
 def next_image() -> None:
     try:
@@ -20,10 +22,12 @@ def next_image() -> None:
 
 def get_image_urls() -> list[str]:
     """Get all image urls in the current page"""
-    return driver.execute_script("let urls = []; \
-                                  let n = document.getElementsByClassName('x5yr21d xu96u03 x10l6tqk x13vifvy x87ps6o xh8yej3'); \
-                                  urls.push(n[0].getAttribute('src'), n[1].getAttribute('src'), n[2].getAttribute('src')); \
-                                  return urls;")
+    return driver.execute_script(
+        "let urls = []; \
+        let n = document.getElementsByClassName('x5yr21d xu96u03 x10l6tqk x13vifvy x87ps6o xh8yej3'); \
+        urls.push(n[0].getAttribute('src'), n[1].getAttribute('src'), n[2].getAttribute('src')); \
+        return urls;"
+    )
 
 def download_image(url: str, name: str, download_path: str | Path) -> None:
     """Download image to the folder"""
@@ -48,7 +52,8 @@ driver = webdriver.Chrome(
 )
 
 # Make folder 'Downloaded' if not exist
-download_folder = Path('Downloaded')
+folder_name = 'Downloaded'
+download_folder = Path(folder_name)
 if not download_folder.exists():
     download_folder.mkdir()
 
@@ -58,6 +63,7 @@ with open('urls.txt', 'r') as f:
 urls = [url for url in data.splitlines() if url]
 
 # Main program
+bulk_rename(folder_name)  # Bulk-rename before set name
 name = len(list(download_folder.glob('*'))) + 1
 for url in urls:
     image_urls_in_post = set()
