@@ -12,8 +12,6 @@ Create new file named `urls.txt` and then paste Instagram post URLs to it, pleas
 py main.py
 ```
 
-If you delete some images, the auto-naming image feature can overwrite other images. Run `bulk_rename.py` to rename all the images.
-
 ### Todo
 - [ ] Handle video in post?
 - [ ] Change the download approach?
