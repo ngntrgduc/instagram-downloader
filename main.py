@@ -63,7 +63,7 @@ with open('urls.txt', 'r') as f:
 urls = [url for url in data.splitlines() if url]
 
 # Main program
-bulk_rename(folder_name)  # Bulk-rename before set name
+bulk_rename(folder_name)  # Bulk-rename to prevent overwrite other images
 name = len(list(download_folder.glob('*'))) + 1
 for url in urls:
     image_urls_in_post = set()
