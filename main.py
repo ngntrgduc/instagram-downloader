@@ -42,6 +42,10 @@ def download_image(url: str, name: str, download_path: str | Path) -> None:
         print(f"Can't save image {name}, {url = }")
         print(f'Exception: {e}')
 
+def clear_file(file_name: str) -> None:
+    open(file_name, 'w').close()
+    print(f'File {file_name} was cleared.')
+
 # Initialize Selenium
 time_start = perf_counter()
 options = webdriver.ChromeOptions() 
@@ -57,7 +61,8 @@ download_folder = Path(folder_name)
 if not download_folder.exists():
     download_folder.mkdir()
 
-with open('urls.txt', 'r') as f:
+file_name = 'urls.txt'
+with open(file_name, 'r') as f:
     data = f.read()
 
 urls = [url for url in data.splitlines() if url]
@@ -100,5 +105,6 @@ for url in urls:
         print(f'Exception: {e}')
         continue
 
-print(f'Done, took {(perf_counter() - time_start) / 60:4} mins.')
+print(f'Done, took {(perf_counter() - time_start) / 60:.4f} mins.')
 driver.quit()
+clear_file(file_name)
