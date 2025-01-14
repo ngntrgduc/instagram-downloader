@@ -13,6 +13,7 @@ py main.py
 ```
 
 ### Todo
+- [ ] Fix sometime download irrelevant images (maybe the JS script cause this)
 - [ ] Handle video in post?
 - [ ] Change the download approach?
 - [ ] Speed up by using asyncio?
