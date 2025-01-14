@@ -9,14 +9,13 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
 
-from bulk_rename import bulk_rename
+from utils import clear_file, bulk_rename
 
 
 def next_image() -> None:
     try:
-        sleep(random.random())
+        sleep(1 + random.random())
         driver.execute_script("document.getElementsByClassName('_afxw')[0].click();")
-        sleep(2 + random.random())
     except Exception as e:
         print(f'Exception: {e}')
 
@@ -29,10 +28,11 @@ def get_image_urls() -> list[str]:
         return urls;"
     )
 
+session = requests.Session()
 def download_image(url: str, name: str, download_path: str | Path) -> None:
     """Download image to the folder"""
     try:
-        image_content = requests.get(url).content
+        image_content = session.get(url).content
         image_file = io.BytesIO(image_content)
         image = Image.open(image_file)
         file_path = Path(download_path, name)
@@ -41,19 +41,6 @@ def download_image(url: str, name: str, download_path: str | Path) -> None:
     except Exception as e:
         print(f"Can't save image {name}, {url = }")
         print(f'Exception: {e}')
-
-def clear_file(file_name: str) -> None:
-    open(file_name, 'w').close()
-    print(f'File {file_name} was cleared.')
-
-# Initialize Selenium
-time_start = perf_counter()
-options = webdriver.ChromeOptions() 
-options.add_argument('--start-maximized')
-driver = webdriver.Chrome(
-    service=ChromeService(ChromeDriverManager().install()),
-    options=options
-)
 
 # Make folder 'Downloaded' if not exist
 folder_name = 'Downloaded'
@@ -67,17 +54,26 @@ with open(file_name, 'r') as f:
 
 urls = [url for url in data.splitlines() if url]
 
-# Main program
 bulk_rename(folder_name)  # Bulk-rename to prevent overwrite other images
+
+# Initialize Selenium
+time_start = perf_counter()
+options = webdriver.ChromeOptions() 
+options.add_argument('--start-maximized')
+driver = webdriver.Chrome(
+    service=ChromeService(ChromeDriverManager().install()),
+    options=options
+)
+
 name = len(list(download_folder.glob('*'))) + 1
 for url in urls:
     image_urls_in_post = set()
     driver.get(url)
-    sleep(random.random()*2 + 5)  # Wait for fully loaded
+    sleep(random.random()*1 + 4.5)  # Wait for fully loaded
     n_images = driver.execute_script("return document.getElementsByClassName('_acnb').length;")
 
     try:
-        sleep(random.random()*1 + 2)
+        sleep(random.random()*1 + 1.5)
         if n_images == 0:  # Handle when the post has 1 image only
             image_urls = get_image_urls()
             download_image(image_urls[0], f'{name}.jpg', download_folder)
@@ -106,5 +102,6 @@ for url in urls:
         continue
 
 print(f'Done, took {(perf_counter() - time_start) / 60:.4f} mins.')
+session.close()
 driver.quit()
 clear_file(file_name)
